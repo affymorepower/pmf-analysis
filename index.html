@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>2.4kW Hub Coverage Analysis</title>
+<style>
+  :root {
+    color-scheme: dark;
+    /* Affy Personal Brand v1.0 */
+    --night:    #021310;   /* Deep Pine */
+    --jade:     #19D096;   /* Mint Jade */
+    --jade-fill: rgba(25, 208, 150, 0.55);
+    --jade-soft: rgba(25, 208, 150, 0.14);
+    --amber:    #FF8C42;   /* Tangerine */
+    --amber-soft: rgba(255, 140, 66, 0.16);
+    --red:      #E63946;   /* Coral Red */
+    --red-fill: rgba(230, 57, 70, 0.62);
+    --white:    #F8F8F5;   /* Ivory */
+    --light:    #D4DDD7;   /* Light Sage */
+    --muted:    #9B9E9C;   /* Stone */
+    --card-bg:  #08291F;   /* Forest Card */
+    --card-bg-2:#0C3527;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Inter", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    margin: 0; padding: 28px;
+    background: var(--night); color: var(--white);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1 { font-size: 24px; margin: 0 0 6px 0; font-weight: 700; letter-spacing: -0.01em; color: var(--white); }
+  h2 { font-size: 11px; margin: 28px 0 10px 0; color: var(--jade); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; }
+  .sub { color: var(--light); font-size: 14px; margin-bottom: 24px; }
+  .sub strong { color: var(--white); font-weight: 700; }
+
+  .claim {
+    background: var(--card-bg);
+    border: 1px solid var(--jade);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    font-size: 14px;
+    color: var(--light);
+  }
+  .claim .claim-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--jade); font-weight: 700; margin-bottom: 4px;
+  }
+  .claim em { color: var(--white); font-style: italic; font-weight: 500; }
+  .claim .source { color: var(--muted); font-size: 12px; font-style: normal; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--jade);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .card .label {
+    font-size: 10px; color: var(--jade); text-transform: uppercase;
+    letter-spacing: 0.14em; margin-bottom: 10px; font-weight: 700;
+  }
+  .card .num { font-size: 44px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .card .num.good { color: var(--jade); }
+  .card .num.bad  { color: var(--red); }
+  .card .desc { font-size: 12px; color: var(--light); margin-top: 8px; }
+
+  .controls {
+    background: var(--card-bg);
+    border: 1px solid var(--jade);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+  }
+  .controls .ctrl-label {
+    font-size: 10px; color: var(--jade); text-transform: uppercase;
+    letter-spacing: 0.14em; font-weight: 700;
+  }
+  .controls .slider-wrap { flex: 1; display: flex; align-items: center; gap: 14px; min-width: 280px; }
+  .controls input[type=range] {
+    flex: 1;
+    -webkit-appearance: none; appearance: none;
+    height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; outline: none;
+  }
+  .controls input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 16px; height: 16px; border-radius: 50%; background: var(--jade); cursor: pointer;
+    border: 2px solid var(--night); box-shadow: 0 0 0 1px var(--jade);
+  }
+  .controls input[type=range]::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%; background: var(--jade); cursor: pointer;
+    border: 2px solid var(--night); box-shadow: 0 0 0 1px var(--jade);
+  }
+  .controls .thr { font-variant-numeric: tabular-nums; font-weight: 700; min-width: 80px; color: var(--white); font-size: 14px; }
+  .reset-btn {
+    margin-left: 8px;
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--amber);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--amber);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .reset-btn:hover { background: var(--amber-soft); }
+
+  .info-box {
+    background: var(--card-bg);
+    border-left: 3px solid var(--amber);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .info-box .info-icon {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--amber); color: var(--night);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; flex-shrink: 0;
+    font-family: serif;
+  }
+  .info-box .info-content {
+    font-size: 13px; color: var(--light); line-height: 1.55;
+  }
+  .info-box .info-content strong { color: var(--white); font-weight: 700; }
+
+  /* Treemap */
+  .treemap-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--jade);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .treemap { position: relative; width: 100%; height: 460px; background: var(--night); border-radius: 8px; overflow: hidden; }
+  .treemap .cell {
+    position: absolute;
+    border: 1.5px solid var(--night);
+    padding: 8px 10px;
+    overflow: hidden;
+    transition: filter 0.15s;
+    cursor: default;
+    border-radius: 2px;
+  }
+  .treemap .cell:hover { filter: brightness(1.18); z-index: 2; }
+  .treemap .cell .cell-content {
+    line-height: 1.2;
+    color: var(--white);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    width: 100%;
+    overflow: hidden;
+  }
+  .treemap .cell .cell-name { font-weight: 700; overflow: hidden; }
+  .treemap .cell .cell-val  { opacity: 0.92; margin-top: 3px; overflow: hidden; font-weight: 500; }
+  .treemap .cell .nowrap { white-space: nowrap; text-overflow: ellipsis; }
+  .treemap .cell.size-xl  { padding: 12px 14px; }
+  .treemap .cell.size-xl  .cell-content { font-size: 14px; }
+  .treemap .cell.size-l   .cell-content { font-size: 12px; }
+  .treemap .cell.size-m   .cell-content { font-size: 11px; }
+  .treemap .cell.size-s   { padding: 5px 7px; }
+  .treemap .cell.size-s   .cell-content { font-size: 10px; }
+  .treemap .cell.size-xs  { padding: 3px 5px; }
+  .treemap .cell.size-xs  .cell-content { font-size: 9px; }
+  .legend { display: flex; gap: 18px; margin-top: 14px; font-size: 11px; color: var(--muted); align-items: center; flex-wrap: wrap; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+  .legend .swatch { display:inline-block; width:14px; height:14px; border-radius:3px; vertical-align: middle; margin-right: 7px; }
+  .legend .right-note { margin-left: auto; color: var(--muted); text-transform: none; letter-spacing: 0; font-weight: 500; font-size: 11px; }
+
+  /* Table */
+  table {
+    width: 100%; border-collapse: collapse;
+    background: var(--card-bg);
+    border: 1px solid var(--jade);
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(0, 177, 108, 0.18); }
+  tbody tr:last-child td { border-bottom: none; }
+  th {
+    background: var(--jade);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  td { color: var(--light); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; color: var(--white); }
+  tr.fits td.appliance-cell::before { content: "● "; color: var(--jade); font-size: 14px; }
+  tr.miss td.appliance-cell::before { content: "● "; color: var(--red); font-size: 14px; }
+  tr.fits td.appliance-cell { color: var(--white); font-weight: 500; }
+  tr.miss td.appliance-cell { color: var(--white); font-weight: 500; }
+  tr:hover td { background: rgba(0, 177, 108, 0.06); }
+
+  td .pct-input {
+    width: 72px;
+    padding: 5px 8px;
+    text-align: right;
+    border: 1px solid rgba(0, 177, 108, 0.4);
+    border-radius: 4px;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    font-family: inherit;
+    background: var(--night);
+    color: var(--white);
+    font-weight: 600;
+  }
+  td .pct-input:focus {
+    outline: 2px solid var(--jade);
+    outline-offset: -1px;
+    border-color: var(--jade);
+  }
+  td .pct-input.edited {
+    background: rgba(241, 143, 2, 0.18);
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+  td .pct-suffix { color: var(--muted); font-size: 12px; margin-left: 4px; }
+
+  .verdict {
+    background: var(--card-bg);
+    border: 1px solid var(--jade);
+    border-left: 3px solid var(--jade);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--light);
+  }
+  .verdict.bad { border-color: var(--red); border-left-color: var(--red); }
+  .verdict .verdict-label {
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700;
+    margin-bottom: 6px; display: block;
+  }
+  .verdict.good .verdict-label { color: var(--jade); }
+  .verdict.bad  .verdict-label { color: var(--red); }
+  .verdict em { font-style: normal; font-weight: 700; }
+  .verdict .v-good { color: var(--jade); }
+  .verdict .v-bad  { color: var(--red); }
+
+  .footnote { font-size: 11px; color: var(--muted); margin-top: 18px; line-height: 1.5; }
+  .footnote a { color: var(--jade); text-decoration: none; }
+  .footnote a:hover { text-decoration: underline; }
+
+  .tooltip {
+    position: fixed;
+    background: var(--night);
+    border: 1px solid var(--jade);
+    color: var(--white);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.1s;
+    z-index: 1000;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    font-family: inherit;
+  }
+  .tooltip strong { color: var(--jade); }
+</style>
+</head>
+<body>
+
+<div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px;">
+  <span style="font-size:18px;font-weight:800;color:var(--jade);letter-spacing:-0.02em;">Affy</span>
+  <span style="color:var(--muted);font-size:13px;">/</span>
+  <span style="color:var(--light);font-size:10px;text-transform:uppercase;letter-spacing:0.16em;font-weight:700;">PMF Analysis</span>
+</div>
+<h1>Does a 2.4 kW Hub cover &gt;90% of productive needs?</h1>
+<div class="sub">Analysis against the <strong>Load Profiles</strong> tab (column D — Rated Consumption) of the PMF spreadsheet · 17-appliance productive basket.</div>
+
+<div class="claim">
+  <div class="claim-label">The claim</div>
+  <em>"A 2.4 kW capacity Hub could meet more than 90% of the productive needs of rural communities."</em>
+  <span class="source">— Okra Solar website</span>
+</div>
+
+<div class="card" style="margin-bottom: 20px;">
+  <div class="label">Coverage at threshold</div>
+  <div class="num" id="num-cov">—</div>
+  <div class="desc">% of productive users whose appliance rated consumption ≤ Hub threshold</div>
+</div>
+
+<div class="controls">
+  <span class="ctrl-label">Hub threshold</span>
+  <div class="slider-wrap">
+    <input type="range" id="threshold" min="100" max="10000" step="100" value="2400">
+    <span class="thr"><span id="thr-val">2,400</span> W</span>
+  </div>
+  <button class="reset-btn" id="reset">Reset %s</button>
+</div>
+
+<div class="info-box">
+  <div class="info-icon">i</div>
+  <div class="info-content">
+    <strong>What the treemap shows:</strong> the modelled % of users in a typical rural community where mesh-grids would be suitable would be using each productive appliance. Rectangle size is proportional to the share of productive-appliance owners covered by each appliance · <span style="color:var(--jade);font-weight:700">Mint Jade</span> = appliance fits under the Hub threshold · <span style="color:var(--red);font-weight:700">Coral Red</span> = appliance exceeds it. Edit any % in the table below to test a different scenario.
+  </div>
+</div>
+
+<div class="treemap-wrap">
+  <div class="treemap" id="treemap"></div>
+  <div class="legend">
+    <span><span class="swatch" style="background:var(--jade)"></span>Fits under threshold</span>
+    <span><span class="swatch" style="background:var(--red)"></span>Exceeds threshold</span>
+    <span class="right-note">Hover any rectangle for full detail</span>
+  </div>
+</div>
+
+<h2>Appliance breakdown · edit % to test scenarios</h2>
+<table id="tbl">
+  <thead>
+    <tr>
+      <th>Appliance</th>
+      <th class="num">Rated W</th>
+      <th class="num">% users owning</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div class="verdict good" id="verdict"></div>
+
+<div class="footnote">
+  Source: <a href="https://docs.google.com/spreadsheets/d/1cDiWhaEolgDtTlZ1WI-C20ddCquOX62XZNqwGbQmWBE/edit?gid=33881101#gid=33881101">Calculations for PMF Hax · Load Profiles tab</a>. "Productive users" = users owning any of the 17 productive appliances. Coverage = Σ(% owners of appliances ≤ threshold) ÷ Σ(% owners across all 17). Edit any % to model a scenario; "Reset" restores spreadsheet defaults.
+</div>
+
+<div class="tooltip" id="tt"></div>
+
+<script>
+const DEFAULTS = [
+  { appliance: "Borehole Pump",                     rated: 2000,  pct: 0.02   },
+  { appliance: "EV Charger",                        rated: 1200,  pct: 0.02   },
+  { appliance: "Battery Charger (6× 2-wheeler EV)", rated: 7500,  pct: 0.0025 },
+  { appliance: "Small Grain Mill",                  rated: 2000,  pct: 0.02   },
+  { appliance: "Cereal Thresher / Oil Press",       rated: 3500,  pct: 0.01   },
+  { appliance: "Community Scale Mill",              rated: 10000, pct: 0.0025 },
+  { appliance: "Electric Cooking",                  rated: 3000,  pct: 0.05   },
+  { appliance: "Welding Machine (Inverter)",        rated: 4300,  pct: 0.01   },
+  { appliance: "Power Tools",                       rated: 2000,  pct: 0.07   },
+  { appliance: "Chest Freezer",                     rated: 200,   pct: 0.25   },
+  { appliance: "Sewing Machine",                    rated: 300,   pct: 0.10   },
+  { appliance: "Barbing Clippers",                  rated: 100,   pct: 0.07   },
+  { appliance: "Printing / Photocopy centre",       rated: 600,   pct: 0.05   },
+  { appliance: "Surface Pump",                      rated: 750,   pct: 0.03   },
+  { appliance: "Community Cold Room",               rated: 2000,  pct: 0.005  },
+  { appliance: "Ice Maker",                         rated: 950,   pct: 0.05   },
+  { appliance: "Air Conditioner",                   rated: 1800,  pct: 0.005  }
+];
+
+const data = DEFAULTS.map(d => ({ ...d }));
+
+const fmtPct1 = v => (v*100).toFixed(1) + "%";
+const fmtPct2 = v => (v*100).toFixed(2) + "%";
+
+// Affy brand colors
+const COLORS = {
+  jade: "#19D096",                   // Mint Jade
+  jadeFill: "rgba(25, 208, 150, 0.78)",
+  red: "#E63946",                    // Coral Red
+  redFill: "rgba(230, 57, 70, 0.78)",
+};
+
+let threshold = 2400;
+const fits = d => d.rated <= threshold;
+const colorOf = d => fits(d) ? COLORS.jadeFill : COLORS.redFill;
+
+function total() { return data.reduce((s,d)=>s+d.pct, 0); }
+function coverage(t) {
+  const TOT = total();
+  if (TOT <= 0) return 0;
+  const s = data.filter(d => d.rated <= t).reduce((a,d) => a+d.pct, 0);
+  return s / TOT;
+}
+
+// ============== Tooltip ==============
+const tt = document.getElementById('tt');
+function showTip(html, e) {
+  tt.innerHTML = html;
+  tt.style.opacity = '1';
+  const w = tt.offsetWidth;
+  const h = tt.offsetHeight;
+  let x = e.clientX + 14;
+  let y = e.clientY + 14;
+  if (x + w + 8 > window.innerWidth)  x = e.clientX - w - 14;
+  if (y + h + 8 > window.innerHeight) y = e.clientY - h - 14;
+  if (x < 4) x = 4;
+  if (y < 4) y = 4;
+  tt.style.left = x + 'px';
+  tt.style.top  = y + 'px';
+}
+function hideTip(){ tt.style.opacity = '0'; }
+
+// ============== Squarified treemap ==============
+function squarify(items, x, y, w, h) {
+  const out = [];
+  const totalValue = items.reduce((s,i) => s + i.value, 0);
+  const scale = (w * h) / totalValue;
+  items = items.map(i => ({ ...i, _area: i.value * scale }));
+
+  function worstAspect(row, side) {
+    const sum = row.reduce((s,r) => s + r._area, 0);
+    const stripLen = sum / side;
+    let max = 0;
+    for (const r of row) {
+      const itemSide = r._area / stripLen;
+      max = Math.max(max, Math.max(itemSide/stripLen, stripLen/itemSide));
+    }
+    return max;
+  }
+
+  function layout(items, x, y, w, h) {
+    if (items.length === 0) return;
+    const side = Math.min(w, h);
+    let row = [items[0]];
+    let i = 1;
+    while (i < items.length) {
+      const before = worstAspect(row, side);
+      const after  = worstAspect([...row, items[i]], side);
+      if (after <= before) { row.push(items[i]); i++; }
+      else break;
+    }
+    const rowSum = row.reduce((s,r)=>s+r._area, 0);
+    const stripLen = rowSum / side;
+    let pos = 0;
+    if (w >= h) {
+      for (const r of row) {
+        const cellH = r._area / stripLen;
+        out.push({ ...r, x, y: y + pos, w: stripLen, h: cellH });
+        pos += cellH;
+      }
+      layout(items.slice(row.length), x + stripLen, y, w - stripLen, h);
+    } else {
+      for (const r of row) {
+        const cellW = r._area / stripLen;
+        out.push({ ...r, x: x + pos, y, w: cellW, h: stripLen });
+        pos += cellW;
+      }
+      layout(items.slice(row.length), x, y + stripLen, w, h - stripLen);
+    }
+  }
+
+  layout(items, x, y, w, h);
+  return out;
+}
+
+function classifyCell(c) {
+  const area = c.w * c.h;
+  const minDim = Math.min(c.w, c.h);
+  if (area >= 20000 && minDim >= 75)      return { sizeClass: 'size-xl', showName: true,  showVal: true,  nameNowrap: false };
+  if (area >= 9000  && minDim >= 60)      return { sizeClass: 'size-l',  showName: true,  showVal: true,  nameNowrap: false };
+  if (area >= 4500  && minDim >= 55)      return { sizeClass: 'size-m',  showName: true,  showVal: true,  nameNowrap: false };
+  if (area >= 2200  && minDim >= 45)      return { sizeClass: 'size-m',  showName: true,  showVal: false, nameNowrap: false };
+  if (area >= 1100  && minDim >= 30)      return { sizeClass: 'size-s',  showName: true,  showVal: false, nameNowrap: true  };
+  if (area >= 500   && minDim >= 20)      return { sizeClass: 'size-xs', showName: true,  showVal: false, nameNowrap: true  };
+  return { sizeClass: 'size-xs', showName: false, showVal: false, nameNowrap: true };
+}
+
+const tmContainer = document.getElementById('treemap');
+function renderTreemap() {
+  tmContainer.innerHTML = '';
+  const W = tmContainer.clientWidth;
+  const H = tmContainer.clientHeight;
+  if (W < 10 || H < 10) return;
+  const items = data
+    .filter(d => d.pct > 0)
+    .map(d => ({ ...d, value: d.pct }))
+    .sort((a,b) => b.value - a.value);
+  if (items.length === 0) return;
+  const cells = squarify(items, 0, 0, W, H);
+  cells.forEach(c => {
+    const div = document.createElement('div');
+    const klass = classifyCell(c);
+    div.className = 'cell ' + klass.sizeClass;
+    div.style.left   = c.x + 'px';
+    div.style.top    = c.y + 'px';
+    div.style.width  = c.w + 'px';
+    div.style.height = c.h + 'px';
+    div.style.background = colorOf(c);
+    let inner = '';
+    if (klass.showName) {
+      inner += `<div class="cell-name${klass.nameNowrap ? ' nowrap' : ''}">${c.appliance}</div>`;
+    }
+    if (klass.showVal) {
+      inner += `<div class="cell-val nowrap">${fmtPct2(c.pct)} own · ${c.rated.toLocaleString()} W</div>`;
+    }
+    div.innerHTML = `<div class="cell-content">${inner}</div>`;
+    const tipHtml = `<strong>${c.appliance}</strong><br>${fmtPct2(c.pct)} of base · ${fmtPct1(c.pct / total())} of productive cohort · ${c.rated.toLocaleString()} W · ${fits(c)?'fits ≤'+threshold.toLocaleString()+'W':'exceeds '+threshold.toLocaleString()+'W'}`;
+    div.addEventListener('mouseenter', e => showTip(tipHtml, e));
+    div.addEventListener('mousemove',  e => showTip(tipHtml, e));
+    div.addEventListener('mouseleave', hideTip);
+    tmContainer.appendChild(div);
+  });
+}
+window.addEventListener('resize', renderTreemap);
+
+// ============== Cards & verdict ==============
+function renderCards() {
+  const cov = coverage(threshold);
+  const covEl = document.getElementById('num-cov');
+  covEl.textContent = fmtPct1(cov);
+  covEl.className = 'num ' + (cov >= 0.9 ? 'good' : 'bad');
+
+  const v = document.getElementById('verdict');
+  v.className = 'verdict ' + (cov >= 0.9 ? 'good' : 'bad');
+  let html;
+  if (threshold === 2400) {
+    if (cov >= 0.9) {
+      html = `<span class="verdict-label">Verdict</span>At <strong>2,400 W</strong>: coverage = <em class="v-good">${fmtPct1(cov)}</em>. The ≥90% claim <em class="v-good">stands up</em> on a rated-consumption basis. Chest Freezer alone takes roughly a third of the productive cohort; the long tail of small appliances (Sewing, Power Tools, Barbing Clippers, Photocopy, Ice Maker, Surface Pump) does most of the rest of the work pushing past 90%.`;
+    } else {
+      html = `<span class="verdict-label">Verdict</span>At <strong>2,400 W</strong>: coverage = <em class="v-bad">${fmtPct1(cov)}</em>. The ≥90% claim <em class="v-bad">does not stand up</em> with the current ownership %s.`;
+    }
+  } else {
+    const ok = cov >= 0.9;
+    html = `<span class="verdict-label">Verdict</span>At <strong>${threshold.toLocaleString()} W</strong>: coverage = <em class="${ok?'v-good':'v-bad'}">${fmtPct1(cov)}</em> of productive users. ${ok?'Meets the ≥90% claim.':'Below the ≥90% claim.'}`;
+  }
+  v.innerHTML = html;
+}
+
+// ============== Table ==============
+const tbody = document.querySelector('#tbl tbody');
+const inputRefs = [];
+
+function renderTableSkeleton() {
+  tbody.innerHTML = '';
+  inputRefs.length = 0;
+  const order = data
+    .map((d, idx) => ({ d, idx }))
+    .sort((a,b) => b.d.pct - a.d.pct);
+  order.forEach(({ d, idx }) => {
+    const tr = document.createElement('tr');
+    tr.className = fits(d) ? 'fits' : 'miss';
+    tr.innerHTML = `
+      <td class="appliance-cell">${d.appliance}</td>
+      <td class="num">${d.rated.toLocaleString()}</td>
+      <td class="num">
+        <input type="number" class="pct-input" min="0" max="100" step="0.25" value="${(d.pct*100).toFixed(2)}">
+        <span class="pct-suffix">%</span>
+      </td>
+    `;
+    tbody.appendChild(tr);
+    const input = tr.querySelector('.pct-input');
+    inputRefs.push({ tr, input, idx });
+    input.addEventListener('input', e => {
+      const raw = parseFloat(e.target.value);
+      if (isNaN(raw) || raw < 0) return;
+      data[idx].pct = Math.min(raw, 100) / 100;
+      const edited = Math.abs(data[idx].pct - DEFAULTS[idx].pct) > 1e-9;
+      input.classList.toggle('edited', edited);
+      renderCards();
+      renderTreemap();
+    });
+  });
+}
+
+function updateRowFitClasses() {
+  inputRefs.forEach(ref => {
+    const d = data[ref.idx];
+    ref.tr.className = fits(d) ? 'fits' : 'miss';
+  });
+}
+
+function resyncInputs() {
+  inputRefs.forEach(ref => {
+    const d = data[ref.idx];
+    ref.input.value = (d.pct*100).toFixed(2);
+    ref.input.classList.remove('edited');
+  });
+}
+
+// ============== Threshold ==============
+document.getElementById('threshold').addEventListener('input', e => {
+  threshold = parseInt(e.target.value, 10);
+  document.getElementById('thr-val').textContent = threshold.toLocaleString();
+  renderTreemap();
+  renderCards();
+  updateRowFitClasses();
+});
+
+// ============== Reset ==============
+document.getElementById('reset').addEventListener('click', () => {
+  DEFAULTS.forEach((d, i) => { data[i].pct = d.pct; });
+  resyncInputs();
+  renderTreemap();
+  renderCards();
+  updateRowFitClasses();
+});
+
+// ============== Init ==============
+renderTableSkeleton();
+renderCards();
+requestAnimationFrame(renderTreemap);
+</script>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Affy Brand Guide</title>
+<style>
+  :root {
+    color-scheme: dark;
+    /* Affy Personal Brand — offset from Okra */
+    --pine:     #021310;    /* slightly cooler than Okra Night Green */
+    --card:     #08291F;    /* cooler card */
+    --card-2:   #0C3527;
+    --mint:     #19D096;    /* brighter, slightly more cyan than Okra Jade */
+    --mint-soft: rgba(25, 208, 150, 0.14);
+    --mint-fill: rgba(25, 208, 150, 0.6);
+    --tangerine:#FF8C42;    /* warmer / peach vs Okra Amber */
+    --tangerine-soft: rgba(255, 140, 66, 0.16);
+    --honey:    #FFCA3A;    /* creamier vs Okra Sunny Yellow */
+    --coral:    #E63946;    /* slightly brighter vs Okra Carmine */
+    --glacier:  #5BC0EB;    /* brighter / bluer vs Okra Ocean Turquoise */
+    --sienna:   #E25B26;    /* same family as Okra Burnt Orange */
+    --ivory:    #F8F8F5;    /* warm white */
+    --sage:     #D4DDD7;    /* subtle cool tinted light */
+    --stone:    #9B9E9C;    /* slightly cooler grey */
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Inter", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    margin: 0; padding: 32px;
+    background: var(--pine); color: var(--ivory);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wordmark {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 6px;
+  }
+  .wordmark .a { font-size: 36px; font-weight: 800; color: var(--mint); letter-spacing: -0.03em; }
+  .wordmark .slash { color: var(--stone); font-size: 24px; font-weight: 300; }
+  .wordmark .meta { color: var(--sage); font-size: 13px; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 600; }
+  h1 { font-size: 32px; margin: 0 0 8px 0; font-weight: 800; letter-spacing: -0.02em; color: var(--ivory); }
+  .tagline { color: var(--sage); font-size: 15px; margin-bottom: 36px; max-width: 720px; }
+  .tagline em { color: var(--tangerine); font-style: normal; font-weight: 600; }
+
+  h2 {
+    font-size: 11px; color: var(--mint); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.16em;
+    margin: 40px 0 16px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+  h2::before {
+    content: ""; display: inline-block; width: 24px; height: 1.5px; background: var(--mint);
+  }
+
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .swatch {
+    background: var(--card);
+    border: 1px solid rgba(25, 208, 150, 0.22);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .swatch .chip {
+    height: 90px;
+    display: flex; align-items: flex-end;
+    padding: 12px 14px;
+    color: var(--pine);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .swatch .chip.dark-on { color: var(--ivory); }
+  .swatch .info { padding: 12px 14px; }
+  .swatch .name { font-weight: 700; font-size: 14px; color: var(--ivory); margin-bottom: 3px; }
+  .swatch .hex { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; color: var(--mint); font-weight: 600; }
+  .swatch .use { font-size: 11px; color: var(--stone); margin-top: 6px; line-height: 1.45; }
+
+  .compare {
+    background: var(--card);
+    border: 1px solid rgba(25, 208, 150, 0.22);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .compare-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(25, 208, 150, 0.1);
+  }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .side { display: flex; align-items: center; gap: 12px; }
+  .compare-row .dot { width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08); }
+  .compare-row .meta { font-size: 13px; }
+  .compare-row .meta .nm { font-weight: 600; color: var(--ivory); }
+  .compare-row .meta .hx { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; color: var(--stone); margin-top: 1px; }
+  .compare-row .arrow { color: var(--stone); font-size: 18px; }
+  .compare-row .role { font-size: 11px; color: var(--stone); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; padding-top: 4px; }
+  .compare-row .label-col { padding-right: 12px; text-align: right; }
+  .compare-row.head {
+    background: rgba(25, 208, 150, 0.06);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--mint);
+    font-weight: 700;
+  }
+  .compare-row.head .col-okra,
+  .compare-row.head .col-affy { text-align: left; }
+  .compare-row.head .col-affy { text-align: left; }
+
+  .rules-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .rule {
+    background: var(--card);
+    border: 1px solid rgba(25, 208, 150, 0.22);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .rule .num {
+    font-size: 11px; color: var(--mint); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.16em; margin-bottom: 8px;
+  }
+  .rule h3 { font-size: 16px; margin: 0 0 6px 0; color: var(--ivory); font-weight: 700; }
+  .rule p { margin: 0; font-size: 13px; color: var(--sage); line-height: 1.55; }
+
+  .typography {
+    background: var(--card);
+    border: 1px solid rgba(25, 208, 150, 0.22);
+    border-radius: 10px;
+    padding: 24px;
+  }
+  .typo-row { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 10px 0; border-bottom: 1px solid rgba(25, 208, 150, 0.1); align-items: baseline; }
+  .typo-row:last-child { border-bottom: none; }
+  .typo-row .label { font-size: 11px; color: var(--stone); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; }
+  .typo-row .sample { color: var(--ivory); }
+  .typo-row .meta { color: var(--stone); font-size: 11px; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-top: 4px; }
+
+  .preview-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .pcard {
+    background: var(--card);
+    border: 1px solid var(--mint);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .pcard.amber  { border-color: var(--tangerine); }
+  .pcard.coral  { border-color: var(--coral); }
+  .pcard .label { font-size: 10px; color: var(--mint); font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 12px; }
+  .pcard.amber .label { color: var(--tangerine); }
+  .pcard.coral .label { color: var(--coral); }
+  .pcard .hero { font-size: 48px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .pcard.mint  .hero { color: var(--mint); }
+  .pcard.amber .hero { color: var(--tangerine); }
+  .pcard.coral .hero { color: var(--coral); }
+  .pcard .sub { color: var(--sage); font-size: 12px; margin-top: 10px; line-height: 1.5; }
+
+  .css-block {
+    background: var(--card-2);
+    border: 1px solid rgba(25, 208, 150, 0.22);
+    border-radius: 10px;
+    padding: 18px;
+    overflow-x: auto;
+  }
+  .css-block pre {
+    margin: 0;
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    color: var(--sage);
+    line-height: 1.6;
+    white-space: pre;
+  }
+  .css-block .key { color: var(--mint); }
+  .css-block .val { color: var(--ivory); }
+  .css-block .comment { color: var(--stone); }
+  .copy-hint { color: var(--stone); font-size: 11px; margin-top: 8px; text-align: right; }
+
+  .footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(25, 208, 150, 0.15); color: var(--stone); font-size: 11px; }
+  .footer .pill { display: inline-block; padding: 2px 8px; background: var(--mint-soft); color: var(--mint); border-radius: 10px; font-weight: 600; margin-right: 6px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+
+<div class="wordmark">
+  <span class="a">Affy</span>
+  <span class="slash">/</span>
+  <span class="meta">Personal Brand v1.0</span>
+</div>
+<h1>Slightly off-Okra.</h1>
+<div class="tagline">A personal palette derived from Okra's brand — same family, distinct identity. <em>Cooler</em>, slightly <em>brighter</em>, with warmer tertiary accents. Use this when something is yours personally rather than an Okra deliverable.</div>
+
+<!-- =============== PALETTE =============== -->
+<h2>Palette</h2>
+<div class="swatch-grid">
+
+  <div class="swatch">
+    <div class="chip dark-on" style="background: #021310;">DEEP PINE</div>
+    <div class="info">
+      <div class="name">Deep Pine</div>
+      <div class="hex">#021310</div>
+      <div class="use">Primary background. Cooler, slightly bluer than Okra Night Green.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip dark-on" style="background: #08291F;">CARD</div>
+    <div class="info">
+      <div class="name">Forest Card</div>
+      <div class="hex">#08291F</div>
+      <div class="use">Card / surface background, one step lighter than Deep Pine.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip" style="background: #19D096;">MINT JADE</div>
+    <div class="info">
+      <div class="name">Mint Jade</div>
+      <div class="hex">#19D096</div>
+      <div class="use">Primary accent. Brighter, slightly more cyan than Okra Jade — positive states, success, "this one."</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip" style="background: #FF8C42;">TANGERINE</div>
+    <div class="info">
+      <div class="name">Tangerine</div>
+      <div class="hex">#FF8C42</div>
+      <div class="use">Secondary accent. Warmer / peach vs Okra Amber — asks, caveats, secondary in pairs.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip" style="background: #FFCA3A;">HONEY</div>
+    <div class="info">
+      <div class="name">Honey</div>
+      <div class="hex">#FFCA3A</div>
+      <div class="use">Tertiary highlight. Creamier than Okra Sunny Yellow — financial highlights, timeline blocks.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip" style="background: #E63946;">CORAL RED</div>
+    <div class="info">
+      <div class="name">Coral Red</div>
+      <div class="hex">#E63946</div>
+      <div class="use">Negative / deficit / exceeds-threshold. Slightly brighter than Okra Carmine.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip" style="background: #5BC0EB;">GLACIER</div>
+    <div class="info">
+      <div class="name">Glacier</div>
+      <div class="hex">#5BC0EB</div>
+      <div class="use">Diagram accent / informational. Brighter, bluer than Okra Ocean Turquoise.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip" style="background: #E25B26;">SIENNA</div>
+    <div class="info">
+      <div class="name">Sienna</div>
+      <div class="hex">#E25B26</div>
+      <div class="use">Diagram alt / competitor label. Same family as Okra Burnt Orange.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip dark-on" style="background: #F8F8F5;color: var(--pine);">IVORY</div>
+    <div class="info">
+      <div class="name">Ivory</div>
+      <div class="hex">#F8F8F5</div>
+      <div class="use">Primary text on dark backgrounds. Warm, not pure white.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip" style="background: #D4DDD7; color: var(--pine);">LIGHT SAGE</div>
+    <div class="info">
+      <div class="name">Light Sage</div>
+      <div class="hex">#D4DDD7</div>
+      <div class="use">Subtitles, captions, secondary body text — cool tint to keep it in family.</div>
+    </div>
+  </div>
+
+  <div class="swatch">
+    <div class="chip" style="background: #9B9E9C; color: var(--pine);">STONE</div>
+    <div class="info">
+      <div class="name">Stone</div>
+      <div class="hex">#9B9E9C</div>
+      <div class="use">Muted text, disabled, footnotes.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- =============== COMPARISON =============== -->
+<h2>Okra ↔ Affy mapping</h2>
+<div class="compare">
+  <div class="compare-row head">
+    <div class="col-okra">Okra Brand</div>
+    <div class="role">→</div>
+    <div class="col-affy">Affy Personal</div>
+  </div>
+
+  <div class="compare-row">
+    <div class="side"><div class="dot" style="background:#00140C"></div><div class="meta"><div class="nm">Night Green</div><div class="hx">#00140C</div></div></div>
+    <div class="arrow">→</div>
+    <div class="side"><div class="dot" style="background:#021310"></div><div class="meta"><div class="nm">Deep Pine</div><div class="hx">#021310 · cooler / bluer</div></div></div>
+  </div>
+  <div class="compare-row">
+    <div class="side"><div class="dot" style="background:#0A2E1A"></div><div class="meta"><div class="nm">Card BG</div><div class="hx">#0A2E1A</div></div></div>
+    <div class="arrow">→</div>
+    <div class="side"><div class="dot" style="background:#08291F"></div><div class="meta"><div class="nm">Forest Card</div><div class="hx">#08291F · deeper / cooler</div></div></div>
+  </div>
+  <div class="compare-row">
+    <div class="side"><div class="dot" style="background:#00B16C"></div><div class="meta"><div class="nm">Jade Green</div><div class="hx">#00B16C</div></div></div>
+    <div class="arrow">→</div>
+    <div class="side"><div class="dot" style="background:#19D096"></div><div class="meta"><div class="nm">Mint Jade</div><div class="hx">#19D096 · brighter, +cyan</div></div></div>
+  </div>
+  <div class="compare-row">
+    <div class="side"><div class="dot" style="background:#F18F02"></div><div class="meta"><div class="nm">Light Amber</div><div class="hx">#F18F02</div></div></div>
+    <div class="arrow">→</div>
+    <div class="side"><div class="dot" style="background:#FF8C42"></div><div class="meta"><div class="nm">Tangerine</div><div class="hx">#FF8C42 · warmer / peach</div></div></div>
+  </div>
+  <div class="compare-row">
+    <div class="side"><div class="dot" style="background:#FEC201"></div><div class="meta"><div class="nm">Sunny Yellow</div><div class="hx">#FEC201</div></div></div>
+    <div class="arrow">→</div>
+    <div class="side"><div class="dot" style="background:#FFCA3A"></div><div class="meta"><div class="nm">Honey</div><div class="hx">#FFCA3A · creamier</div></div></div>
+  </div>
+  <div class="compare-row">
+    <div class="side"><div class="dot" style="background:#C2283A"></div><div class="meta"><div class="nm">Carmine Red</div><div class="hx">#C2283A</div></div></div>
+    <div class="arrow">→</div>
+    <div class="side"><div class="dot" style="background:#E63946"></div><div class="meta"><div class="nm">Coral Red</div><div class="hx">#E63946 · brighter</div></div></div>
+  </div>
+  <div class="compare-row">
+    <div class="side"><div class="dot" style="background:#44B1CA"></div><div class="meta"><div class="nm">Ocean Turquoise</div><div class="hx">#44B1CA</div></div></div>
+    <div class="arrow">→</div>
+    <div class="side"><div class="dot" style="background:#5BC0EB"></div><div class="meta"><div class="nm">Glacier</div><div class="hx">#5BC0EB · brighter / bluer</div></div></div>
+  </div>
+  <div class="compare-row">
+    <div class="side"><div class="dot" style="background:#E85012"></div><div class="meta"><div class="nm">Burnt Orange</div><div class="hx">#E85012</div></div></div>
+    <div class="arrow">→</div>
+    <div class="side"><div class="dot" style="background:#E25B26"></div><div class="meta"><div class="nm">Sienna</div><div class="hx">#E25B26 · same family</div></div></div>
+  </div>
+</div>
+
+<!-- =============== TYPOGRAPHY =============== -->
+<h2>Typography</h2>
+<div class="typography">
+
+  <div class="typo-row">
+    <div class="label">Display</div>
+    <div>
+      <div class="sample" style="font-size: 44px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1;">Slightly off-Okra.</div>
+      <div class="meta">Inter · 44px · weight 800 · letter-spacing -0.02em</div>
+    </div>
+  </div>
+
+  <div class="typo-row">
+    <div class="label">Heading</div>
+    <div>
+      <div class="sample" style="font-size: 24px; font-weight: 700; letter-spacing: -0.01em;">Section header in heading weight</div>
+      <div class="meta">Inter · 24px · weight 700</div>
+    </div>
+  </div>
+
+  <div class="typo-row">
+    <div class="label">Micro caps</div>
+    <div>
+      <div class="sample" style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--mint);">SECTION LABEL · MINT JADE</div>
+      <div class="meta">Inter · 11px · weight 700 · uppercase · tracking 0.16em</div>
+    </div>
+  </div>
+
+  <div class="typo-row">
+    <div class="label">Hero stat</div>
+    <div>
+      <div class="sample" style="font-size: 64px; font-weight: 800; color: var(--mint); letter-spacing: -0.03em; line-height: 1;">90.2%</div>
+      <div class="meta">Inter · 64–80px · weight 800 · letter-spacing -0.03em</div>
+    </div>
+  </div>
+
+  <div class="typo-row">
+    <div class="label">Body</div>
+    <div>
+      <div class="sample" style="font-size: 14px; font-weight: 400; color: var(--sage);">Body text uses Light Sage at 14px regular for a calmer feel against the Deep Pine background. Increase weight to 500 for emphasis.</div>
+      <div class="meta">Inter · 14px · weight 400</div>
+    </div>
+  </div>
+
+  <div class="typo-row">
+    <div class="label">Mono / numeric</div>
+    <div>
+      <div class="sample" style="font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; color: var(--mint);">tabular-nums · #19D096 · 2,400 W</div>
+      <div class="meta">SF Mono / Menlo · 12–13px · for hex codes and tabular numerics</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- =============== USAGE RULES =============== -->
+<h2>Semantic rules</h2>
+<div class="rules-grid">
+
+  <div class="rule">
+    <div class="num">Rule 01 · Pairing</div>
+    <h3>Mint &amp; Tangerine for parallel items</h3>
+    <p>When showing two parallel things (A vs B, recommended vs alternative), one gets Mint and the other gets Tangerine. Never both Mint.</p>
+  </div>
+
+  <div class="rule">
+    <div class="num">Rule 02 · Negative states</div>
+    <h3>Coral Red, sparingly</h3>
+    <p>Coral Red is reserved for true negatives — exceeds threshold, deficit, risk, blocker. Don't use for normal accents.</p>
+  </div>
+
+  <div class="rule">
+    <div class="num">Rule 03 · Cards</div>
+    <h3>Forest Card on Deep Pine, with Mint borders</h3>
+    <p>Cards always have rounded 10–12px corners and a 1px Mint border. Switch to Tangerine border for secondary / parallel card.</p>
+  </div>
+
+  <div class="rule">
+    <div class="num">Rule 04 · Highlighted card</div>
+    <h3>Mint fill, Ivory text</h3>
+    <p>The one card you want the eye drawn to gets a solid Mint fill and Ivory text. Don't fill more than one card per row.</p>
+  </div>
+
+  <div class="rule">
+    <div class="num">Rule 05 · Headings</div>
+    <h3>Micro caps in Mint, tracked-out</h3>
+    <p>Section headings are short, all-caps, 11–12px, weight 700, letter-spacing 0.16em, coloured Mint. Always preceded by a 24px Mint rule for that "Affy look."</p>
+  </div>
+
+  <div class="rule">
+    <div class="num">Rule 06 · Typography</div>
+    <h3>Inter, not Manrope</h3>
+    <p>Use Inter as the default. It's slightly more geometric than Manrope and signals "this is Affy" without being incongruous next to Okra material.</p>
+  </div>
+
+</div>
+
+<!-- =============== EXAMPLE CARDS =============== -->
+<h2>In action</h2>
+<div class="preview-row">
+  <div class="pcard mint">
+    <div class="label">Coverage at threshold</div>
+    <div class="hero">90.2%</div>
+    <div class="sub">Stands up to the ≥90% claim with the current ownership %s.</div>
+  </div>
+  <div class="pcard amber">
+    <div class="label">Caveat / Ask</div>
+    <div class="hero">0.2pp</div>
+    <div class="sub">Headroom above 90% is thin — losing any small-appliance category drops below the line.</div>
+  </div>
+  <div class="pcard coral">
+    <div class="label">Exceeds Hub</div>
+    <div class="hero">7.5%</div>
+    <div class="sub">Productive users whose nameplate rating exceeds 2.4 kW (Community Mill, EV bank, Welder).</div>
+  </div>
+</div>
+
+<!-- =============== CSS VARIABLES =============== -->
+<h2>CSS variables · copy &amp; paste</h2>
+<div class="css-block">
+<pre><span class="key">:root</span> {
+  <span class="comment">/* Affy Personal Brand v1.0 */</span>
+  <span class="key">--pine</span>:      <span class="val">#021310</span>;  <span class="comment">/* primary background */</span>
+  <span class="key">--card</span>:      <span class="val">#08291F</span>;  <span class="comment">/* card surface */</span>
+  <span class="key">--card-2</span>:    <span class="val">#0C3527</span>;  <span class="comment">/* card surface, one step lighter */</span>
+  <span class="key">--mint</span>:      <span class="val">#19D096</span>;  <span class="comment">/* primary accent · positive */</span>
+  <span class="key">--tangerine</span>: <span class="val">#FF8C42</span>;  <span class="comment">/* secondary accent · ask / parallel */</span>
+  <span class="key">--honey</span>:     <span class="val">#FFCA3A</span>;  <span class="comment">/* tertiary highlight */</span>
+  <span class="key">--coral</span>:     <span class="val">#E63946</span>;  <span class="comment">/* negative · exceeds */</span>
+  <span class="key">--glacier</span>:   <span class="val">#5BC0EB</span>;  <span class="comment">/* informational accent */</span>
+  <span class="key">--sienna</span>:    <span class="val">#E25B26</span>;  <span class="comment">/* diagram alt */</span>
+  <span class="key">--ivory</span>:     <span class="val">#F8F8F5</span>;  <span class="comment">/* primary text */</span>
+  <span class="key">--sage</span>:      <span class="val">#D4DDD7</span>;  <span class="comment">/* secondary text */</span>
+  <span class="key">--stone</span>:     <span class="val">#9B9E9C</span>;  <span class="comment">/* muted text */</span>
+}
+
+<span class="comment">/* Font stack — falls back through Manrope to system if Inter isn't installed */</span>
+<span class="key">body</span> {
+  <span class="key">font-family</span>: <span class="val">"Inter", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif</span>;
+  <span class="key">background</span>: <span class="val">var(--pine)</span>;
+  <span class="key">color</span>: <span class="val">var(--ivory)</span>;
+  <span class="key">-webkit-font-smoothing</span>: <span class="val">antialiased</span>;
+}</pre>
+</div>
+<div class="copy-hint">Drop these vars at the top of any of your personal projects and you get Affy Mode for free.</div>
+
+<div class="footer">
+  <span class="pill">v1.0</span>
+  <span class="pill">Personal use</span>
+  Derived from Okra Solar's brand system · keep within the family · don't ship this on Okra-deliverable artefacts (those stay pure Okra brand).
+</div>
+
+</body>
+</html>
