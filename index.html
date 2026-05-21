@@ -276,7 +276,7 @@
   <span style="color:var(--light);font-size:10px;text-transform:uppercase;letter-spacing:0.16em;font-weight:700;">PMF Analysis</span>
 </div>
 <h1>Does a 2.4 kW Hub cover &gt;90% of productive needs?</h1>
-<div class="sub">Analysis against the <strong>Load Profiles</strong> tab (column D — Rated Consumption) of the PMF spreadsheet · 17-appliance productive basket.</div>
+<div class="sub">Analysis against the <strong>Load Profiles</strong> tab (column D — Rated Consumption) of the PMF spreadsheet · 21-appliance productive basket.</div>
 
 <div class="claim">
   <div class="claim-label">The claim</div>
@@ -302,7 +302,7 @@
 <div class="info-box">
   <div class="info-icon">i</div>
   <div class="info-content">
-    <strong>What the treemap shows:</strong> the modelled % of users in a typical rural community where mesh-grids would be suitable would be using each productive appliance. Rectangle size is proportional to the share of productive-appliance owners covered by each appliance · <span style="color:var(--jade);font-weight:700">Mint Jade</span> = appliance fits under the Hub threshold · <span style="color:var(--red);font-weight:700">Coral Red</span> = appliance exceeds it. Edit any % in the table below to test a different scenario.
+    <strong>What the treemap shows:</strong> the modelled % of users in a typical rural community where mesh-grids would be suitable would be using each productive appliance. Rectangle size is proportional to the share of productive-appliance owners covered by each appliance · <span style="color:var(--jade);font-weight:700">Mint Jade</span> = appliance fits under the Hub threshold · <span style="color:var(--red);font-weight:700">Coral Red</span> = appliance exceeds it. Edit any % in the table below to test a different scenario.<br><br><strong>Modelled cohort</strong> represents a PUE-stimulated mesh-grid community after appliance financing, with forward-looking assumptions of how much PUE adoption there would be given access to this energy availability.<br><br><strong>Reference:</strong> Appliance basket and % assumptions are informed by CrossBoundary Innovation Lab's <a href="https://crossboundary.com/wp-content/uploads/2023/08/CrossBoundary-Innovation-Lab-Appliance-Financing-3.0-Innovation-Insight-10-January-2023.pdf" target="_blank" rel="noopener" style="color:var(--jade);text-decoration:underline;">Appliance Financing 3.0 Innovation Insight</a> (326 income-generating machines deployed across 25 mini-grid sites in Nigeria, Kenya and Tanzania).
   </div>
 </div>
 
@@ -343,13 +343,17 @@ const DEFAULTS = [
   { appliance: "Small Grain Mill",                  rated: 2000,  pct: 0.02   },
   { appliance: "Cereal Thresher / Oil Press",       rated: 3500,  pct: 0.01   },
   { appliance: "Community Scale Mill",              rated: 10000, pct: 0.0025 },
-  { appliance: "Electric Cooking",                  rated: 3000,  pct: 0.05   },
+  { appliance: "Electric Cooking",                  rated: 3000,  pct: 0.03   },
+  { appliance: "EPC",                               rated: 1200,  pct: 0.05   },
   { appliance: "Welding Machine (Inverter)",        rated: 4300,  pct: 0.01   },
-  { appliance: "Power Tools",                       rated: 2000,  pct: 0.07   },
-  { appliance: "Chest Freezer",                     rated: 200,   pct: 0.25   },
-  { appliance: "Sewing Machine",                    rated: 300,   pct: 0.10   },
-  { appliance: "Barbing Clippers",                  rated: 100,   pct: 0.07   },
-  { appliance: "Printing / Photocopy centre",       rated: 600,   pct: 0.05   },
+  { appliance: "Bench Saw / Wood Mill",             rated: 2200,  pct: 0.02   },
+  { appliance: "Angle Grinder",                     rated: 1000,  pct: 0.015  },
+  { appliance: "Blender",                           rated: 400,   pct: 0.04   },
+  { appliance: "Washing Machine",                   rated: 700,   pct: 0.005  },
+  { appliance: "Chest Freezer",                     rated: 200,   pct: 0.15   },
+  { appliance: "Sewing Machine",                    rated: 300,   pct: 0.06   },
+  { appliance: "Barbing Clippers",                  rated: 100,   pct: 0.04   },
+  { appliance: "Printing / Photocopy centre",       rated: 600,   pct: 0.03   },
   { appliance: "Surface Pump",                      rated: 750,   pct: 0.03   },
   { appliance: "Community Cold Room",               rated: 2000,  pct: 0.005  },
   { appliance: "Ice Maker",                         rated: 950,   pct: 0.05   },
